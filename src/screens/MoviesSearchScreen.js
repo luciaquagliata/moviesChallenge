@@ -1,18 +1,19 @@
-import React, { useState } from "react";
-import { Text, View, TextInput, StyleSheet, ScrollView } from "react-native";
-import SearchBar from "../components/SearchBar";
-import ResultsList from "../components/ResultsList";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchMovies } from "../store/slices/moviesSlice";
+import React, {useState} from 'react';
+import {Text, View, TextInput, StyleSheet, ScrollView} from 'react-native';
+import SearchBar from '../components/SearchBar';
+import ResultsList from '../components/ResultsList';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchMovies} from '../store/slices/moviesSlice';
 
 const MoviesSearchScreen = () => {
   const dispatch = useDispatch();
-  const handleSearch = (term) => {
+  const handleSearch = term => {
     dispatch(fetchMovies(term));
+    setTerm('');
   };
-  const movies = useSelector((state) => state.movies.movies);
+  const movies = useSelector(state => state.movies.movies);
 
-  const [term, setTerm] = useState("");
+  const [term, setTerm] = useState('');
 
   return (
     <View>
