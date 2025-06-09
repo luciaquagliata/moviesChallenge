@@ -3,10 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
-  Image,
+  TouchableOpacity,
   StyleSheet,
-  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {getAuth} from '@react-native-firebase/auth';
 
@@ -17,16 +18,8 @@ export default function LoginScreen({setUser}) {
 
   const handleLogin = async () => {
     setError('');
-
-    if (!email.trim()) {
-      setError('El email no puede estar vacío.');
-      return;
-    }
-
-    if (!password) {
-      setError('La contraseña no puede estar vacía.');
-      return;
-    }
+    if (!email.trim()) return setError('Email requerido');
+    if (!password) return setError('Contraseña requerida');
 
     try {
       const userCredential = await getAuth().signInWithEmailAndPassword(
@@ -35,65 +28,87 @@ export default function LoginScreen({setUser}) {
       );
       setUser(userCredential.user);
     } catch (error) {
-      if (error.code === 'auth/invalid-email') {
-        setError('Email inválido');
-      } else if (error.code === 'auth/user-not-found') {
+      if (error.code === 'auth/invalid-email') setError('Email inválido');
+      else if (error.code === 'auth/user-not-found')
         setError('Usuario no registrado');
-      } else if (error.code === 'auth/wrong-password') {
+      else if (error.code === 'auth/wrong-password')
         setError('Contraseña incorrecta');
-      } else if (error.code === 'auth/invalid-credential') {
-        setError('Credenciales inválidas o expiradas');
-      } else {
-        setError('Ocurrió un error. Intenta nuevamente.');
-      }
+      else setError('Ocurrió un error. Intenta nuevamente.');
     }
   };
 
   return (
-    <>
-      <Image style={styles.image} source={require('../../assets/logo.png')} />
-      <View style={styles.container}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          placeholder="Contraseña"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          style={styles.input}
-        />
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-        <Button title="Iniciar sesión" onPress={handleLogin} />
-      </View>
-    </>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <Image source={require('../../assets/logo.png')} style={styles.logo} />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        placeholderTextColor="#888"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        placeholderTextColor="#888"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 24,
     justifyContent: 'center',
+    alignItems: 'center',
   },
+
+  logo: {
+    width: 350,
+    height: 140,
+    resizeMode: 'contain',
+  },
+
   input: {
-    borderWidth: 1,
-    marginBottom: 12,
-    padding: 8,
-    borderRadius: 4,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    fontSize: 16,
+    paddingVertical: 12,
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#000',
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 24,
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   error: {
     color: 'red',
     marginBottom: 12,
-  },
-  image: {
-    alignSelf: 'center',
-    marginTop: 100,
-    marginBottom: 40,
+    textAlign: 'center',
   },
 });
