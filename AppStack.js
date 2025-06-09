@@ -1,10 +1,17 @@
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
 import {View, TouchableOpacity, Text} from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppStack({setUser}) {
+  const handleLogout = async () => {
+    await auth().signOut();
+    setUser(null);
+  };
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -14,7 +21,7 @@ export default function AppStack({setUser}) {
           title: 'Look for movies!',
           headerRight: () => (
             <View style={{marginRight: 12}}>
-              <TouchableOpacity onPress={() => setUser(null)}>
+              <TouchableOpacity onPress={handleLogout}>
                 <Text>Logout</Text>
               </TouchableOpacity>
             </View>
@@ -24,6 +31,33 @@ export default function AppStack({setUser}) {
     </Stack.Navigator>
   );
 }
+
+// import {createNativeStackNavigator} from '@react-navigation/native-stack';
+// import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
+// import {View, TouchableOpacity, Text} from 'react-native';
+
+// const Stack = createNativeStackNavigator();
+
+// export default function AppStack({setUser}) {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen
+//         name="MoviesSearch"
+//         component={MoviesSearchScreen}
+//         options={{
+//           title: 'Look for movies!',
+//           headerRight: () => (
+//             <View style={{marginRight: 12}}>
+//               <TouchableOpacity onPress={() => setUser(null)}>
+//                 <Text>Logout</Text>
+//               </TouchableOpacity>
+//             </View>
+//           ),
+//         }}
+//       />
+//     </Stack.Navigator>
+//   );
+// }
 
 /*
 <TouchableOpacity onPress={() => setUser(null)}>
