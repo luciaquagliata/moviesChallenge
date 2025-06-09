@@ -7,6 +7,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import {store} from './src/store';
+import Toast from 'react-native-toast-message';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -26,19 +27,22 @@ export default function App() {
   if (initializing) return null; // o un SplashScreen
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            {user ? (
-              <AppStack setUser={setUser} />
-            ) : (
-              <AuthStack setUser={setUser} />
-            )}
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </Provider>
-    </GestureHandlerRootView>
+    <>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <Provider store={store}>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              {user ? (
+                <AppStack setUser={setUser} />
+              ) : (
+                <AuthStack setUser={setUser} />
+              )}
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </Provider>
+      </GestureHandlerRootView>
+      <Toast />
+    </>
   );
 }
 

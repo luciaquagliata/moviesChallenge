@@ -10,16 +10,28 @@ import {
   Platform,
 } from 'react-native';
 import {getAuth} from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
 
 export default function LoginScreen({setUser}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    setError('');
-    if (!email.trim()) return setError('Email requerido');
-    if (!password) return setError('Contraseña requerida');
+    if (!email.trim()) {
+      Toast.show({
+        type: 'error',
+        text1: 'Email requerido',
+      });
+      return;
+    }
+
+    if (!password) {
+      Toast.show({
+        type: 'error',
+        text1: 'Contraseña requerida',
+      });
+      return;
+    }
 
     try {
       const userCredential = await getAuth().signInWithEmailAndPassword(
@@ -28,12 +40,18 @@ export default function LoginScreen({setUser}) {
       );
       setUser(userCredential.user);
     } catch (error) {
-      if (error.code === 'auth/invalid-email') setError('Email inválido');
-      else if (error.code === 'auth/user-not-found')
-        setError('Usuario no registrado');
-      else if (error.code === 'auth/wrong-password')
-        setError('Contraseña incorrecta');
-      else setError('Ocurrió un error. Intenta nuevamente.');
+      if (error.code === 'auth/invalid-email') {
+        Toast.show({type: 'error', text1: 'Email inválido'});
+      } else if (error.code === 'auth/user-not-found') {
+        Toast.show({type: 'error', text1: 'Usuario no registrado'});
+      } else if (error.code === 'auth/wrong-password') {
+        Toast.show({type: 'error', text1: 'Contraseña incorrecta'});
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Ocurrió un error. Intenta nuevamente.',
+        });
+      }
     }
   };
 
@@ -60,7 +78,6 @@ export default function LoginScreen({setUser}) {
         onChangeText={setPassword}
         secureTextEntry
       />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
