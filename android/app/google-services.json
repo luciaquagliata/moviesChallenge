@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "720495133731",
+    "project_id": "moviess-aa618",
+    "storage_bucket": "moviess-aa618.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720495133731:android:4a7250a2e5ef0d074a5d96",
+        "android_client_info": {
+          "package_name": "com.moviess"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7ps5FWfUbZdFO4wS5xZNXXU-oEcHR0pI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
