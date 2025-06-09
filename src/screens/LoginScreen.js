@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import auth from '@react-native-firebase/auth';
+import {getAuth} from '@react-native-firebase/auth';
 
 export default function LoginScreen({setUser}) {
   const [email, setEmail] = useState('');
@@ -29,11 +29,10 @@ export default function LoginScreen({setUser}) {
     }
 
     try {
-      const userCredential = await auth().signInWithEmailAndPassword(
+      const userCredential = await getAuth().signInWithEmailAndPassword(
         email.trim(),
         password,
       );
-      console.log('Usuario logueado:', userCredential.user.email);
       setUser(userCredential.user);
     } catch (error) {
       if (error.code === 'auth/invalid-email') {
