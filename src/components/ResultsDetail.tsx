@@ -1,7 +1,16 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 
-const ResultsDetail = ({ result }) => {
+interface Result {
+  title: string;
+  image: string;
+}
+
+interface ResultsDetailProps {
+  result: Result;
+}
+
+const ResultsDetail: React.FC<ResultsDetailProps> = ({ result }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.name}>{result.title}</Text>

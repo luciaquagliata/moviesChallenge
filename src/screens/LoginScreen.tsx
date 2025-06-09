@@ -9,10 +9,14 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {getAuth} from '@react-native-firebase/auth';
+import {getAuth, FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {Alert} from 'react-native';
 
-export default function LoginScreen({setUser}) {
+interface LoginScreenProps {
+  setUser: (user: FirebaseAuthTypes.User | null) => void;
+}
+
+const LoginScreen: React.FC<LoginScreenProps> = ({setUser}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,7 +37,7 @@ export default function LoginScreen({setUser}) {
         password,
       );
       setUser(userCredential.user);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'auth/invalid-email') {
         Alert.alert('Error', 'Email inválido');
       } else if (error.code === 'auth/user-not-found') {
@@ -75,7 +79,7 @@ export default function LoginScreen({setUser}) {
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -120,3 +124,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default LoginScreen;

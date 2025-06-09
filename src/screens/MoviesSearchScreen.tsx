@@ -4,14 +4,15 @@ import SearchBar from '../components/SearchBar';
 import ResultsList from '../components/ResultsList';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchMovies} from '../store/slices/moviesSlice';
+import {RootState} from '../store/types';
 
-const MoviesSearchScreen = () => {
+const MoviesSearchScreen: React.FC = () => {
   const dispatch = useDispatch();
-  const handleSearch = term => {
+  const handleSearch = (term: string) => {
     dispatch(fetchMovies(term));
     setTerm('');
   };
-  const movies = useSelector(state => state.movies.movies);
+  const movies = useSelector((state: RootState) => state.movies.movies);
 
   const [term, setTerm] = useState('');
 

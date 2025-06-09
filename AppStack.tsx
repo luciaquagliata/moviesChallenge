@@ -2,17 +2,20 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
 import {View, TouchableOpacity, Text} from 'react-native';
-// import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {clearMovies} from './src/store/slices/moviesSlice';
 import {getApp} from '@react-native-firebase/app';
-import {getAuth} from '@react-native-firebase/auth';
+import {getAuth, FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 const auth = getAuth(getApp());
 
 const Stack = createNativeStackNavigator();
 
-export default function AppStack({setUser}) {
+interface AppStackProps {
+  setUser: (user: FirebaseAuthTypes.User | null) => void;
+}
+
+const AppStack: React.FC<AppStackProps> = ({setUser}) => {
   const dispatch = useDispatch();
   const handleLogout = async () => {
     await auth.signOut();
@@ -38,4 +41,6 @@ export default function AppStack({setUser}) {
       />
     </Stack.Navigator>
   );
-}
+};
+
+export default AppStack;

@@ -2,7 +2,13 @@ import React from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const SearchBar = ({term, onTermChange, onTermSubmit}) => {
+interface SearchBarProps {
+  term: string;
+  onTermChange: (text: string) => void;
+  onTermSubmit: () => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({term, onTermChange, onTermSubmit}) => {
   return (
     <View style={styles.backgroundStyle}>
       <Icon name="search" style={styles.iconStyle} />
@@ -19,7 +25,6 @@ const SearchBar = ({term, onTermChange, onTermSubmit}) => {
   );
 };
 
-// <Feather name="search" style={styles.iconStyle} />
 const styles = StyleSheet.create({
   backgroundStyle: {
     backgroundColor: '#E0DEDE',

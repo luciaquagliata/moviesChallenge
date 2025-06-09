@@ -1,7 +1,30 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import IMDb from '../../api/IMDb';
 
-export const fetchMovies = createAsyncThunk(
+interface Movie {
+  id: string;
+  title: string;
+  image: string;
+}
+
+interface MoviesState {
+  errorMessage: string;
+  searchTerm: string;
+  movies: Movie[];
+}
+
+interface MovieResponse {
+  id: string;
+  primaryTitle: string;
+  primaryImage: string;
+}
+
+interface ApiResponse {
+  data: MovieResponse[];
+  searchTerm: string;
+}
+
+export const fetchMovies = createAsyncThunk<ApiResponse, string>(
   'movies/fetchMovies',
   async (searchTerm, thunkAPI) => {
     try {
@@ -15,23 +38,25 @@ export const fetchMovies = createAsyncThunk(
   },
 );
 
+const initialState: MoviesState = {
+  errorMessage: '',
+  searchTerm: '',
+  movies: [],
+};
+
 const moviesSlice = createSlice({
   name: 'movies',
-  initialState: {
-    errorMessage: '',
-    searchTerm: '',
-    movies: [],
-  },
+  initialState,
   reducers: {
-    clearMovies: state => {
+    clearMovies: (state) => {
       state.movies = [];
       state.searchTerm = '';
       state.errorMessage = '';
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(fetchMovies.fulfilled, (state, action) => {
+      .addCase(fetchMovies.fulfilled, (state, action: PayloadAction<ApiResponse>) => {
         const movies = action.payload.data
           .filter(movie => movie.primaryImage)
           .map(movie => ({
@@ -46,7 +71,7 @@ const moviesSlice = createSlice({
         state.errorMessage = '';
       })
       .addCase(fetchMovies.rejected, (state, action) => {
-        state.errorMessage = action.payload || 'Unknown error';
+        state.errorMessage = action.payload as string || 'Unknown error';
       });
   },
 });

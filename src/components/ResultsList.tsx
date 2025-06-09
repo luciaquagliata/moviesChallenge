@@ -2,7 +2,17 @@ import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import ResultsDetail from "./ResultsDetail";
 
-const ResultsList = ({ results }) => {
+interface Result {
+  id: string;
+  title: string;
+  image: string;
+}
+
+interface ResultsListProps {
+  results: Result[];
+}
+
+const ResultsList: React.FC<ResultsListProps> = ({ results }) => {
   if (!results.length) {
     return (
       <View>
