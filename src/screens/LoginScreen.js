@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import {getAuth} from '@react-native-firebase/auth';
-import Toast from 'react-native-toast-message';
+import {Alert} from 'react-native';
 
 export default function LoginScreen({setUser}) {
   const [email, setEmail] = useState('');
@@ -18,18 +18,12 @@ export default function LoginScreen({setUser}) {
 
   const handleLogin = async () => {
     if (!email.trim()) {
-      Toast.show({
-        type: 'error',
-        text1: 'Email requerido',
-      });
+      Alert.alert('Error', 'Email requerido');
       return;
     }
 
     if (!password) {
-      Toast.show({
-        type: 'error',
-        text1: 'Contraseña requerida',
-      });
+      Alert.alert('Error', 'Contraseña requerida');
       return;
     }
 
@@ -41,16 +35,13 @@ export default function LoginScreen({setUser}) {
       setUser(userCredential.user);
     } catch (error) {
       if (error.code === 'auth/invalid-email') {
-        Toast.show({type: 'error', text1: 'Email inválido'});
+        Alert.alert('Error', 'Email inválido');
       } else if (error.code === 'auth/user-not-found') {
-        Toast.show({type: 'error', text1: 'Usuario no registrado'});
+        Alert.alert('Error', 'Usuario no registrado');
       } else if (error.code === 'auth/wrong-password') {
-        Toast.show({type: 'error', text1: 'Contraseña incorrecta'});
+        Alert.alert('Error', 'Contraseña incorrecta');
       } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Ocurrió un error. Intenta nuevamente.',
-        });
+        Alert.alert('Error', 'Ocurrió un error. Intenta nuevamente.');
       }
     }
   };
